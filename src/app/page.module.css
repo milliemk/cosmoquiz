@@ -68,10 +68,7 @@
   padding: 0 20px;
   border: none;
   border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -164,5 +161,39 @@ a.secondary {
 @media (prefers-color-scheme: dark) {
   .logo {
     filter: invert();
+  }
+}
+
+.welcome {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(33, 33, 33, 0.6);
+  border-radius: 20px;
+  padding: 0.5rem;
+
+  & p {
+    max-width: 400px;
+    font-size: 25px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 680px) {
+  .welcome {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: rgba(33, 33, 33, 0.6);
+    border-radius: 20px;
+    margin-top: 18rem;
+
+    & p {
+      font-size: 22px;
+      text-align: center;
+    }
   }
 }

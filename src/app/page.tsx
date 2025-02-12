@@ -1,108 +1,67 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Righteous, Quicksand } from "next/font/google";
+
+const righteous = Righteous({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+
+const quicksand = Quicksand({
+  weight: ["400"],
+  subsets: ["latin"],
+});
 
 export default async function Home() {
-  const apiKEy = process.env.GEMINI_API_KEY;
-  console.log(apiKEy);
-  const genAI = new GoogleGenerativeAI(`${apiKEy}`);
+  /* const apiKEy = process.env.GEMINI_API_KEY;
+   const genAI = new GoogleGenerativeAI(`${apiKEy}`);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const prompt =
     "ask me a question about space with 4 alternative answers, 1 correct and 3 false";
 
   const result = await model.generateContent(prompt);
-  console.log(result.response.text());
+  console.log(result.response.text()); */
 
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className={styles.welcome}>
+        <div
+          style={{
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 40,
+          }}
+        >
+          <p className={quicksand.className}>
+            What’s up, space cadet? Galaxy Gus here to guide you through a
+            cosmic quiz. Let’s see if you’ve got what it takes to be a true
+            space explorer. Ready for lift-off?
+          </p>
+          <button
+            style={{
+              width: 100,
+              padding: 8,
+              borderRadius: 10,
+              backgroundColor: "black",
+              fontSize: 17,
+            }}
+            className={righteous.className}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <p>Hello It is our first project</p>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+            Launch!
+          </button>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <Image
+          src="/image1-removebg.png"
+          alt="astronaut"
+          height={300}
+          width={300}
+        ></Image>
+      </div>
     </div>
   );
 }
