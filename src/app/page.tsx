@@ -3,9 +3,9 @@ import styles from "./page.module.css";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function Home() {
-  const genAI = new GoogleGenerativeAI(
-    "AIzaSyDZHmLGpN4Wwb5hYaxdIQv_7UO0kYv46Ak"
-  );
+  const apiKEy = process.env.GEMINI_API_KEY;
+  console.log(apiKEy);
+  const genAI = new GoogleGenerativeAI(`${apiKEy}`);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const prompt =
