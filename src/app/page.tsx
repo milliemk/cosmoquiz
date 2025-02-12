@@ -14,15 +14,18 @@ const quicksand = Quicksand({
 });
 
 export default async function Home() {
+
   /* const apiKEy = process.env.GEMINI_API_KEY;
    const genAI = new GoogleGenerativeAI(`${apiKEy}`);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  const prompt =
-    "ask me a question about space with 4 alternative answers, 1 correct and 3 false";
+
+  // const prompt =
+  //   "ask me a question about space with 4 alternative answers, 1 correct and 3 false";
 
   const result = await model.generateContent(prompt);
   console.log(result.response.text()); */
+
 
   return (
     <div className={styles.page}>
