@@ -14,7 +14,6 @@ const quicksand = Quicksand({
 });
 
 export default async function Home() {
-
   /* const apiKEy = process.env.GEMINI_API_KEY;
    const genAI = new GoogleGenerativeAI(`${apiKEy}`);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -25,7 +24,6 @@ export default async function Home() {
 
   const result = await model.generateContent(prompt);
   console.log(result.response.text()); */
-
 
   return (
     <div className={styles.page}>
@@ -59,10 +57,11 @@ export default async function Home() {
           </button>
         </div>
         <Image
-          src="/image1-removebg.png"
+          src="/image3.png"
           alt="astronaut"
-          height={300}
-          width={300}
+          height={200}
+          width={150}
+          style={{ paddingRight: 40 }}
         ></Image>
       </div>
     </div>

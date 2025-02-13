@@ -43,16 +43,15 @@ export default function RootLayout({
         }}
       >
         <div
-          className={righteous.className}
           style={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 120,
+            gap: 40,
           }}
         >
           {" "}
-          <h1 className="homeTitle">Cosmoquiz</h1>
+          <h1 className={`homeTitle ${righteous.className}`}>Cosmoquiz</h1>
           {children}
         </div>
       </body>
