@@ -172,10 +172,12 @@ a.secondary {
   background-color: rgba(33, 33, 33, 0.6);
   border-radius: 20px;
   padding: 0.5rem;
+  gap: 1rem;
 
   & p {
+    padding-top: 2rem;
     max-width: 400px;
-    font-size: 25px;
+    font-size: 22px;
     text-align: center;
   }
 }
@@ -192,7 +194,7 @@ a.secondary {
     margin-top: 18rem;
 
     & p {
-      font-size: 22px;
+      font-size: 20px;
       text-align: center;
     }
   }
