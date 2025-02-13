@@ -40,3 +40,9 @@ a {
     color-scheme: dark;
   }
 }
+
+.homeTitle {
+  margin-top: 2rem;
+  font-size: 70px;
+  color: aliceblue;
+}
