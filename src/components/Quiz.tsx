@@ -1,6 +1,20 @@
 "use client";
+import styles from "@/app/styles/QuizCard.module.css";
 import { Content } from "@/models/customTypes";
 import { useState } from "react";
+import { Quicksand, Righteous } from "next/font/google";
+import Head from "next/head";
+import Link from "next/link";
+
+const quicksand = Quicksand({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+
+const righteous = Righteous({
+  weight: ["400"],
+  subsets: ["latin"],
+});
 
 export default function Quiz() {
   const [questions, setQuestions] = useState<Content[]>([]);
@@ -12,6 +26,7 @@ export default function Quiz() {
   const [quizStarted, setQuizStarted] = useState(false);
   const [numQuestions, setNumQuestions] = useState(3);
   const [topic, setTopic] = useState("space");
+  const [difficulty, setDifficulty] = useState("easy");
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -22,10 +37,11 @@ export default function Quiz() {
       const response = await fetch("/api/questions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ numQuestions, topic }),
+        body: JSON.stringify({ numQuestions, topic, difficulty }),
       });
 
       const data = await response.json();
+      console.log("response :>> ", response);
       if (response.ok) {
         setQuestions(data);
         setCurrentQuestion(0);
@@ -68,97 +84,173 @@ export default function Quiz() {
 
   return (
     // This Block shows to the user parameter area
-    <div>
-      <h2>Quiz Generator</h2>
-
-      {!quizStarted ? (
-        <div>
-          <label>
-            Number of Questions:
-            <input
-              type="number"
-              value={numQuestions}
-              onChange={(e) => setNumQuestions(parseInt(e.target.value))}
-              min="1"
-              max="10"
-            />
-          </label>
-
-          <label id="selectTopic">
-            Topic:
-            {/* <input
-              type="text"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-            /> */}
-            <select
-              id="selectTopic"
-              onChange={(e) => setTopic(e.target.value)}
-              required
-            >
-              <option value="spase">Spase</option>
-              <option value="exoplanet">Exoplanet</option>
-              <option value="stars">Stars</option>
-              <option value="planets">Planets</option>
-            </select>
-          </label>
-          {/* This button will trigger function which fetch data from server component*/}
-          <button onClick={fetchQuestions} disabled={loading}>
-            {loading ? "Loading..." : "Start Quiz"}
-          </button>
-
-          {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
+    <>
+      <div>
+        <div className={styles.abort}>
+          <Link href="/" className={righteous.className}>
+            Cancel
+          </Link>
         </div>
-      ) : (
-        // This block shows user cards with questions
-        <div>
-          {loading ? (
-            <p>Loading questions...</p>
-          ) : questions.length > 0 ? (
-            <div>
-              <h3>{questions[currentQuestion].question}</h3>
-              {questions[currentQuestion].answers.map((answer, index) => (
-                <label key={index} style={{ display: "block" }}>
-                  <input
-                    type="radio"
-                    // name="answer"
-                    name={`quiz-${currentQuestion}`}
-                    //This prevent default checked from previous question, because the radio button is checked only if selectedAnswer matches index.
-                    checked={selectedAnswer === index}
-                    value={index}
-                    onChange={() => handleAnswerSelect(index)}
-                    disabled={selectedAnswer !== null}
-                  />
-                  {answer}
-                </label>
-              ))}
-              {/* This area is appeared when user chooses an answer, here will be shown the answer correct or not */}
-              {selectedAnswer !== null && (
-                <p>
-                  {isCorrect ? "✅ Correct!" : "❌ Wrong!"} The correct answer
-                  is:{" "}
-                  {
-                    questions[currentQuestion].answers[
-                      questions[currentQuestion].correctIndex
-                    ]
-                  }
-                </p>
-              )}
-
-              <button
-                onClick={handleNextQuestion}
-                disabled={selectedAnswer === null}
-              >
-                {currentQuestion < questions.length - 1
-                  ? "Next Question"
-                  : "Finish Quiz"}
-              </button>
+        {!quizStarted ? (
+          <div className={styles.quizContainer}>
+            <div className={`${styles.quizHeader} ${righteous.className}`}>
+              <h2>Customize Your Mission</h2>
             </div>
-          ) : (
-            <p>No questions available.</p>
-          )}
-        </div>
-      )}
-    </div>
+            <div className={styles.quizBody}>
+              <p className={quicksand.className}>
+                {" "}
+                Adjust your quiz length, choose your category, and get set for
+                launch!
+              </p>
+              <div className={`${styles.quizOptions} ${righteous.className}`}>
+                <label className={styles.spacedLabel}>
+                  Quiz Length:
+                  <input
+                    type="number"
+                    value={numQuestions}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      if (!value || isNaN(value)) {
+                        setNumQuestions(1); // You could also default to a specific number if you prefer
+                      } else {
+                        setNumQuestions(value);
+                        console.log("value", typeof value);
+                      }
+                      //setNumQuestions(parseInt(e.target.value))
+                    }}
+                    min="1"
+                    max="10"
+                    onKeyDown={(e) => e.preventDefault()}
+                  />
+                </label>
+                <label id="selectDifficulty" className={styles.spacedLabel}>
+                  Difficulty:
+                  <select
+                    id="selectDifficulty"
+                    className={quicksand.className}
+                    onChange={(e) => setDifficulty(e.target.value)}
+                  >
+                    <option value="easy">Easy</option>
+                    <option value="mediun">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </label>
+                <label id="selectTopic" className={styles.spacedLabel}>
+                  Topic:
+                  <select
+                    id="selectTopic"
+                    onChange={(e) => setTopic(e.target.value)}
+                    required
+                  >
+                    <option value="space">Space</option>
+                    <option value="exoplanet">Exoplanet</option>
+                    <option value="stars">Stars</option>
+                    <option value="planets">Planets</option>
+                  </select>
+                </label>
+              </div>
+              <div className={styles.quizFooter}>
+                {/* This button will trigger function which fetch data from server component*/}
+                <button
+                  onClick={fetchQuestions}
+                  disabled={loading}
+                  style={{
+                    width: 100,
+                    padding: 10,
+                    borderRadius: 10,
+                    border: "transparent",
+                    backgroundColor: "black",
+                    fontSize: 17,
+                  }}
+                  className={righteous.className}
+                >
+                  {loading ? "Loading..." : "Start"}
+                </button>
+              </div>
+              {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
+            </div>{" "}
+          </div>
+        ) : (
+          // This block shows user cards with questions
+          <div>
+            {loading ? (
+              <p className={quicksand.className}>Loading questions...</p>
+            ) : questions.length > 0 ? (
+              <div className={styles.quizContainer}>
+                <div className={`${styles.quizHeader} ${righteous.className}`}>
+                  <h2>{questions[currentQuestion].question}</h2>
+                </div>
+                <div className={styles.quizBody}>
+                  <div
+                    className={`${styles.quizOptions} ${quicksand.className}`}
+                  >
+                    {questions[currentQuestion].answers.map((answer, index) => (
+                      <label key={index} className={styles.quizAnswers}>
+                        <input
+                          type="radio"
+                          // name="answer"
+                          name={`quiz-${currentQuestion}`}
+                          //This prevent default checked from previous question, because the radio button is checked only if selectedAnswer matches index.
+                          checked={selectedAnswer === index}
+                          value={index}
+                          onChange={() => handleAnswerSelect(index)}
+                          disabled={selectedAnswer !== null}
+                        />
+                        {answer}
+                      </label>
+                    ))}
+                    {/* This area is appeared when user chooses an answer, here will be shown the answer correct or not */}
+                    {selectedAnswer !== null && (
+                      <p>
+                        {isCorrect ? "✅ Correct!" : "❌ Wrong!"} The correct
+                        answer is:{" "}
+                        {
+                          questions[currentQuestion].answers[
+                            questions[currentQuestion].correctIndex
+                          ]
+                        }
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.quizFooter}>
+                  <button
+                    className={quicksand.className}
+                    style={{
+                      width: 80,
+                      padding: 8,
+                      borderRadius: 10,
+                      backgroundColor: "transparent",
+                      fontSize: 17,
+                    }}
+                  >
+                    Hint
+                  </button>
+                  <button
+                    className={quicksand.className}
+                    onClick={handleNextQuestion}
+                    disabled={selectedAnswer === null}
+                    style={{
+                      width: 120,
+                      padding: 8,
+                      borderRadius: 10,
+                      border: "transparent",
+                      backgroundColor: "black",
+                      fontSize: 17,
+                    }}
+                  >
+                    {currentQuestion < questions.length - 1
+                      ? "Next"
+                      : "Finish Quiz"}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p>No questions available.</p>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
