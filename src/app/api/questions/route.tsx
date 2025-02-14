@@ -4,27 +4,18 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req: Request) {
   try {
-    const { numQuestions, topic } = await req.json();
+    const { numQuestions, topic, difficulty } = await req.json();
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey)
       return NextResponse.json({ error: "API key missing" }, { status: 500 });
-
+    console.log("route component");
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
     });
 
-    // const prompt = `
-    //   Generate ${numQuestions} multiple-choice questions about ${topic}.
-    //   Each question should have:
-    //   - A "question" field (string)
-    //   - An "answers" field (array of 4 options)
-    //   - A "correctIndex" field (integer, indicating the index of the correct answer)
-    //   Provide the response in valid JSON format as an array.
-    // `;
-
     const prompt = `
-Generate ${numQuestions} multiple-choice questions about ${topic}. 
+Generate ${numQuestions} multiple-choice questions about ${topic} and make it on ${difficulty} level. Question title length maximum 120 characters.
 
 Each question must follow this JSON format:
 {
