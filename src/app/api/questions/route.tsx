@@ -10,19 +10,58 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "API key missing" }, { status: 500 });
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+    });
+
+    // const prompt = `
+    //   Generate ${numQuestions} multiple-choice questions about ${topic}.
+    //   Each question should have:
+    //   - A "question" field (string)
+    //   - An "answers" field (array of 4 options)
+    //   - A "correctIndex" field (integer, indicating the index of the correct answer)
+    //   Provide the response in valid JSON format as an array.
+    // `;
 
     const prompt = `
-      Generate ${numQuestions} multiple-choice questions about ${topic}.
-      Each question should have:
-      - A "question" field (string)
-      - An "answers" field (array of 4 options)
-      - A "correctIndex" field (integer, indicating the index of the correct answer)
-      Provide the response in valid JSON format as an array.
-    `;
+Generate ${numQuestions} multiple-choice questions about ${topic}. 
 
-    const result = await model.generateContent(prompt);
+Each question must follow this JSON format:
+{
+  "question": "string",
+  "answers": ["string", "string", "string", "string"],
+  "correctIndex": integer
+}
+
+- Ensure each question is unique and not repeated from previous responses.
+- Use varied wording and difficulty levels for diversity.
+- Do not include explanations, just return the JSON array of questions.
+
+Return ONLY the JSON array, without any additional text.
+`;
+
+    //const result = await model.generateContent(prompt);
+
+    const result = await model.generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: prompt,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.8,
+        topK: 40, // Consider top 40 possible words
+        topP: 0.8, // Use top 80% probable words
+      },
+    });
+
     const textResponse = result.response.text().trim();
+    // console.log("textResponse", textResponse);
 
     // Extract JSON safely
     const jsonMatch = textResponse.match(/```json\n([\s\S]+)\n```/);
@@ -30,6 +69,7 @@ export async function POST(req: Request) {
     // console.log("array index 1", jsonMatch[1]);
     const jsonString = jsonMatch ? jsonMatch[1] : textResponse;
     const questions = JSON.parse(jsonString);
+    // console.log("questions", questions);
     // NextResponse - Produce a response with the given JSON body
     // https://nextjs.org/docs/app/api-reference/functions/next-response
     return NextResponse.json(questions);
