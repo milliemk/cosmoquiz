@@ -4,4 +4,5 @@ export interface Content {
   question: string
   answers: string[]
   correctIndex: number
+  hint: string
 }

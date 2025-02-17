@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       model: "gemini-1.5-flash",
     });
 
-    const prompt = `
+    /* const prompt = `
 Generate ${numQuestions} multiple-choice questions about ${topic} and make it on ${difficulty} level. Question title length maximum 120 characters.
 
 Each question must follow this JSON format:
@@ -26,6 +26,26 @@ Each question must follow this JSON format:
 
 - Ensure each question is unique and not repeated from previous responses.
 - Use varied wording and difficulty levels for diversity.
+- Do not include explanations, just return the JSON array of questions.
+
+Return ONLY the JSON array, without any additional text.
+`; */
+
+    const prompt = `
+Generate ${numQuestions} multiple-choice questions about ${topic} and make them at the ${difficulty} level. The question title length must be a maximum of 120 characters.
+
+Each question must follow this JSON format:
+{
+  "question": "string",
+  "answers": ["string", "string", "string", "string"],
+  "correctIndex": integer,
+  "hint": "string"
+}
+
+- Ensure each question is unique and not repeated from previous responses.
+- Use varied wording and difficulty levels for diversity.
+- Provide a **hint** for each question, but **do not include any of the answer options** in the hint.
+- The hint should give additional context or guidance but should not reveal the correct answer directly.
 - Do not include explanations, just return the JSON array of questions.
 
 Return ONLY the JSON array, without any additional text.
