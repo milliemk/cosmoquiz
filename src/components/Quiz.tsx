@@ -27,6 +27,8 @@ export default function Quiz() {
   const [numQuestions, setNumQuestions] = useState(3);
   const [topic, setTopic] = useState("space");
   const [difficulty, setDifficulty] = useState("easy");
+  const [hint, setHint] = useState(false);
+  const [quizResult, setQuizResult] = useState<boolean[]>([]);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -41,7 +43,7 @@ export default function Quiz() {
       });
 
       const data = await response.json();
-      console.log("response :>> ", response);
+      console.log("data :>> ", data);
       if (response.ok) {
         setQuestions(data);
         setCurrentQuestion(0);
@@ -77,7 +79,9 @@ export default function Quiz() {
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
+      console.log("quizResult", quizResult);
       alert("Quiz Completed!");
+      setQuizResult([]);
       setQuizStarted(false);
     }
   };
@@ -199,6 +203,8 @@ export default function Quiz() {
                         {answer}
                       </label>
                     ))}
+                    {/* This area is appeared when user press button hint */}
+                    {hint && questions[currentQuestion].hint}
                     {/* This area is appeared when user chooses an answer, here will be shown the answer correct or not */}
                     {selectedAnswer !== null && (
                       <p>
@@ -216,6 +222,10 @@ export default function Quiz() {
                 <div className={styles.quizFooter}>
                   <button
                     className={quicksand.className}
+                    onClick={() => {
+                      /* setHint((prevHint) => !prevHint); */
+                      setHint(true);
+                    }}
                     style={{
                       width: 80,
                       padding: 8,
@@ -228,7 +238,15 @@ export default function Quiz() {
                   </button>
                   <button
                     className={quicksand.className}
-                    onClick={handleNextQuestion}
+                    /* onClick={handleNextQuestion} */
+                    onClick={() => {
+                      handleNextQuestion();
+                      setHint(false);
+                      setQuizResult((prevResult) => [
+                        ...prevResult,
+                        isCorrect ?? false,
+                      ]);
+                    }}
                     disabled={selectedAnswer === null}
                     style={{
                       width: 120,
