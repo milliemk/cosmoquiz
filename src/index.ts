@@ -1,35 +1,34 @@
 import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { users } from "./db/schema";
 import { eq } from "drizzle-orm";
-import { usersTable } from "./db/schema";
 
-const db = drizzle(process.env.DATABASE_URL!);
+// Initialize database connection
+const connectionString = process.env.DATABASE_URL!;
+const pool = postgres(connectionString, { max: 1 });
+const db = drizzle(pool);
+
 async function main() {
-  const user: typeof usersTable.$inferInsert = {
-    name: "John",
-    age: 30,
-    email: "john@example.com",
+  /*  const user = {
+    id: crypto.randomUUID(), // Ensure ID is generated correctly
+    name: "Manuela",
+    email: "manuela@example.com",
+    emailVerified: null,
+    image: null,
   };
-  await db.insert(usersTable).values(user);
-  console.log("New user created!");
-  const users = await db.select().from(usersTable);
-  console.log("Getting all users from the database: ", users);
-  /*
-  const users: {
-    id: number;
-    name: string;
-    age: number;
-    email: string;
-  }[]
-  */
-  await db
-    .update(usersTable)
-    .set({
-      age: 31,
-    })
-    .where(eq(usersTable.email, user.email));
-  console.log("User info updated!");
-  /* await db.delete(usersTable).where(eq(usersTable.email, user.email));
-  console.log('User deleted!') */
+
+  await db.insert(users).values(user);
+  console.log("New user created!"); */
+
+  const allUsers = await db.select().from(users);
+  console.log("Getting all users from the database:", allUsers);
+
+  /*   await db.update(users)
+    .set({ name: "John Doe" })
+    .where(eq(users.email, user.email));
+
+  console.log("User info updated!"); */
 }
+
 main();

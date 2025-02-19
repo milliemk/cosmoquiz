@@ -173,6 +173,7 @@ a.secondary {
   border-radius: 20px;
   padding: 0.5rem;
   gap: 1rem;
+  margin-top: 150px;
 
   & p {
     padding-top: 2rem;
