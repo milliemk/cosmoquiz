@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Righteous } from "next/font/google";
-import Head from "next/head";
 
 const righteous = Righteous({
   weight: ["400"],
@@ -33,16 +32,25 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
-        style={{
-          backgroundImage: "url('/background.jpeg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-          margin: 0,
-          padding: 0,
-          height: "100vh",
-        }}
+        style={{ margin: 0, padding: 0 }}
       >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            objectFit: "cover",
+            zIndex: -1, // Puts the video behind content
+          }}
+        >
+          <source src="/video2.mp4" type="video/mp4" />
+        </video>
         <div
           style={{
             display: "flex",

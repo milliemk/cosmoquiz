@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Righteous, Quicksand } from "next/font/google";
+import Link from "next/link";
 
 const righteous = Righteous({
   weight: ["400"],
@@ -14,17 +14,6 @@ const quicksand = Quicksand({
 });
 
 export default async function Home() {
-  /* const apiKEy = process.env.GEMINI_API_KEY;
-   const genAI = new GoogleGenerativeAI(`${apiKEy}`);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-
-  // const prompt =
-  //   "ask me a question about space with 4 alternative answers, 1 correct and 3 false";
-
-  const result = await model.generateContent(prompt);
-  console.log(result.response.text()); */
-
   return (
     <div className={styles.page}>
       <div className={styles.welcome}>
@@ -43,18 +32,20 @@ export default async function Home() {
             cosmic quiz. Let’s see if you’ve got what it takes to be a true
             space explorer. Ready for lift-off?
           </p>
-          <button
-            style={{
-              width: 100,
-              padding: 8,
-              borderRadius: 10,
-              backgroundColor: "black",
-              fontSize: 17,
-            }}
-            className={righteous.className}
-          >
-            Launch!
-          </button>
+          <Link href="/quiz">
+            <button
+              style={{
+                width: 100,
+                padding: 8,
+                borderRadius: 10,
+                backgroundColor: "black",
+                fontSize: 17,
+              }}
+              className={righteous.className}
+            >
+              Launch!
+            </button>
+          </Link>
         </div>
         <Image
           src="/image3.png"
