@@ -1,4 +1,4 @@
-import styles from "@/app/styles/QuizCard.module.css";
+import styles from "@/styles/QuizCard.module.css";
 import { Quicksand, Righteous } from "next/font/google";
 import Image from "next/image";
 
