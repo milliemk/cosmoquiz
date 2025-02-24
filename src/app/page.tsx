@@ -2,6 +2,10 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import { Righteous, Quicksand } from "next/font/google";
 import Link from "next/link";
+<<<<<<< HEAD
+import { auth } from "../../auth";
+=======
+>>>>>>> origin/main
 
 const righteous = Righteous({
   weight: ["400"],
