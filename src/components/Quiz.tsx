@@ -1,5 +1,5 @@
 "use client";
-import styles from "@/app/styles/QuizCard.module.css";
+import styles from "@/styles/QuizCard.module.css";
 import { Content } from "@/models/customTypes";
 import { useState } from "react";
 import { Quicksand, Righteous } from "next/font/google";
