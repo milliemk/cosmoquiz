@@ -1,9 +1,13 @@
-import QuizCard from "@/components/QuizCard";
+import LoginForm from "@/components/LoginForm";
+import RegisterForm from "@/components/RegisterForm";
 
 function page() {
   return (
     <>
-      <QuizCard />
+      <LoginForm />
+      <br />
+      <br />
+      <RegisterForm />
     </>
   );
 }
