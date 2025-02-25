@@ -1,7 +1,7 @@
 "use client";
 import styles from "@/styles/QuizCard.module.css";
 import { Content } from "@/models/customTypes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Quicksand, Righteous } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export default function Quiz() {
   const [topic, setTopic] = useState("space");
   const [difficulty, setDifficulty] = useState("easy");
   const [hint, setHint] = useState(false);
-  const [quizResult, setQuizResult] = useState<boolean[]>([]);
+  const [quizResult, setQuizResult] = useState(0);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -43,7 +43,7 @@ export default function Quiz() {
       });
 
       const data = await response.json();
-      console.log("data :>> ", data);
+      //console.log("data :>> ", data);
       if (response.ok) {
         setQuestions(data);
         setCurrentQuestion(0);
@@ -79,9 +79,8 @@ export default function Quiz() {
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
-      console.log("quizResult", quizResult);
-      alert("Quiz Completed!");
-      setQuizResult([]);
+      alert(`Quiz Completed! You scored ${quizResult} points`);
+      setQuizResult(0);
       setQuizStarted(false);
     }
   };
@@ -135,7 +134,7 @@ export default function Quiz() {
                     onChange={(e) => setDifficulty(e.target.value)}
                   >
                     <option value="easy">Easy</option>
-                    <option value="mediun">Medium</option>
+                    <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                   </select>
                 </label>
@@ -197,7 +196,29 @@ export default function Quiz() {
                           //This prevent default checked from previous question, because the radio button is checked only if selectedAnswer matches index.
                           checked={selectedAnswer === index}
                           value={index}
-                          onChange={() => handleAnswerSelect(index)}
+                          onChange={() => {
+                            handleAnswerSelect(index);
+                            setQuizResult((prevResult) => {
+                              // we can not use hier state variable IsCorrect, because of asynchronous behavior
+                              if (
+                                index ===
+                                questions[currentQuestion].correctIndex
+                              ) {
+                                switch (difficulty) {
+                                  case "easy":
+                                    return prevResult + 1;
+                                  case "medium":
+                                    return prevResult + 2;
+                                  case "easy":
+                                    return prevResult + 3;
+                                  default:
+                                    return prevResult;
+                                }
+                              } else {
+                                return prevResult;
+                              }
+                            });
+                          }}
                           disabled={selectedAnswer !== null}
                         />
                         {answer}
@@ -242,10 +263,6 @@ export default function Quiz() {
                     onClick={() => {
                       handleNextQuestion();
                       setHint(false);
-                      setQuizResult((prevResult) => [
-                        ...prevResult,
-                        isCorrect ?? false,
-                      ]);
                     }}
                     disabled={selectedAnswer === null}
                     style={{
