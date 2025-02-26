@@ -98,3 +98,14 @@ export const authenticators = pgTable(
     },
   ]
 );
+
+export const quizResults = pgTable("quiz_result", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()), 
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }), 
+  score: integer("score").notNull(), 
+  totalQuestions: integer("total_questions").notNull()
+});

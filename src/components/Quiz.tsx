@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Quicksand, Righteous } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const quicksand = Quicksand({
   weight: ["400"],
@@ -29,6 +30,9 @@ export default function Quiz() {
   const [difficulty, setDifficulty] = useState("easy");
   const [hint, setHint] = useState(false);
   const [quizResult, setQuizResult] = useState(0);
+
+  const session = useSession();
+  console.log("session from Quiz component:>> ", session);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -68,6 +72,26 @@ export default function Quiz() {
     setIsCorrect(index === questions[currentQuestion].correctIndex);
   };
 
+  async function submitQuizResult(
+    userId: string,
+    score: number,
+    totalQuestions: number
+  ) {
+    try {
+      const response = await fetch("/api/quiz-result", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, score, totalQuestions }),
+      });
+
+      if (!response.ok) throw new Error("Failed to submit quiz result");
+
+      console.log("Quiz result saved successfully!");
+    } catch (error) {
+      console.error("Error submitting quiz result:", error);
+    }
+  }
+
   // This function show next question when user press the button next question
   const handleNextQuestion = () => {
     // In block IF we check, that we can't go farther then length array of the questions
@@ -82,6 +106,11 @@ export default function Quiz() {
       alert(`Quiz Completed! You scored ${quizResult} points`);
       setQuizResult(0);
       setQuizStarted(false);
+      // At this point we send score to the server, if user is logedIn
+      if (session.status === "authenticated") {
+        console.log("User is autorised");
+        submitQuizResult(session.data.user.id, quizResult, questions.length);
+      }
     }
   };
 
