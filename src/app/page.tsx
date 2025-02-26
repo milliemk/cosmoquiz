@@ -24,7 +24,6 @@ export default async function Home() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            gap: 40,
           }}
         >
           <p className={quicksand.className}>
@@ -33,26 +32,15 @@ export default async function Home() {
             space explorer. Ready for lift-off?
           </p>
           <Link href="/quiz">
-            <button
-              style={{
-                width: 100,
-                padding: 8,
-                borderRadius: 10,
-                backgroundColor: "black",
-                fontSize: 17,
-              }}
-              className={righteous.className}
-            >
-              Launch!
-            </button>
+            <button className={styles.button}>Launch!</button>
           </Link>
         </div>
         <Image
-          src="/image3.png"
+          src="/ai_crop.png"
           alt="astronaut"
-          height={200}
-          width={150}
-          style={{ paddingRight: 40 }}
+          height={300}
+          width={209}
+          style={{ paddingRight: 40, paddingTop: 20, paddingBottom: 20 }}
         ></Image>
       </div>
     </div>

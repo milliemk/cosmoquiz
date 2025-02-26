@@ -2,6 +2,19 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { object, string, ZodError } from "zod";
+import styles from "@/styles/loginAndRegister.module.css";
+import { Quicksand, Righteous } from "next/font/google";
+import RegisterGoogle from "@/components/RegisterGoogle";
+
+const quicksand = Quicksand({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+
+const righteous = Righteous({
+  weight: ["400"],
+  subsets: ["latin"],
+});
 
 export const signUpSchema = object({
   name: string({ required_error: "Name is required" })
@@ -72,8 +85,8 @@ export default function form() {
         <div style={{ color: "white" }}>Loading ...</div>
       ) : session.status === "authenticated" ? (
         <>
-          <div style={{ color: "white" }}>
-            Welcome {session.data.user?.name}
+          <div style={{ color: "white" }} className={righteous.className}>
+            Welcome, {session.data.user?.name}!
           </div>
           <button
             onClick={() => signOut()}
@@ -83,25 +96,33 @@ export default function form() {
           </button>
         </>
       ) : (
-        <>
-          <h2>Registration</h2>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <h2>Registration</h2>
+          </div>
           {messageFromServer && <h4>{messageFromServer}</h4>}
-          <form onSubmit={hundleSubmit}>
-            <label>
+          <form onSubmit={hundleSubmit} className={styles.form}>
+            <p className={quicksand.className}>
+              Ready to start your journey? Set up your Space Credentials and
+              join the Crew today.
+            </p>
+            <label className={styles.spacedLabel}>
               Name
               <input name="name" type="text" />
             </label>
-            <label>
+            <label className={styles.spacedLabel}>
               Email
               <input name="email" type="email" />
             </label>
-            <label>
+            <label className={styles.spacedLabel}>
               Password
               <input name="password" type="password" />
             </label>
-            <button>Sign Up</button>
+            <div className={styles.footer}></div>
+            <button className={styles.button}>Confirm</button>
           </form>
-        </>
+          <RegisterGoogle />
+        </div>
       )}
     </div>
   );

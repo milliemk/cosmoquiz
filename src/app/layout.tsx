@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Righteous } from "next/font/google";
+import NavigationBar from "@/components/NavigationBar";
+import { SessionProvider } from "next-auth/react";
+import Link from "next/link";
 
 const righteous = Righteous({
   weight: ["400"],
@@ -30,39 +33,44 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable}`}
-        style={{ margin: 0, padding: 0 }}
-      >
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            objectFit: "cover",
-            zIndex: -1, // Puts the video behind content
-          }}
+      <SessionProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable}`}
+          style={{ margin: 0, padding: 0 }}
         >
-          <source src="/video2.mp4" type="video/mp4" />
-        </video>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {" "}
-          <h1 className={`homeTitle ${righteous.className}`}>Cosmoquiz</h1>
-          {children}
-        </div>
-      </body>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              objectFit: "cover",
+              zIndex: -1, // Puts the video behind content
+            }}
+          >
+            <source src="/video2.mp4" type="video/mp4" />
+          </video>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Link href="/">
+              <h1 className={`homeTitle ${righteous.className}`}>Cosmoquiz</h1>
+            </Link>
+            <NavigationBar />
+            {children}
+          </div>
+        </body>
+      </SessionProvider>
     </html>
   );
 }

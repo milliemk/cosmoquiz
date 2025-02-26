@@ -3,6 +3,20 @@ import { FormEvent, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { object, string, ZodError } from "zod";
 import SignInGoogle from "@/components/SignInGoogle";
+import styles from "@/styles/loginAndRegister.module.css";
+import { Quicksand, Righteous } from "next/font/google";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const quicksand = Quicksand({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+
+const righteous = Righteous({
+  weight: ["400"],
+  subsets: ["latin"],
+});
 
 export const signInSchema = object({
   email: string({ required_error: "Email is required" })
@@ -15,9 +29,9 @@ export const signInSchema = object({
 });
 
 export default function LoginForm() {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const session = useSession();
-  console.log("session :>> ", session);
 
   const hundleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +50,9 @@ export default function LoginForm() {
         email: formData.get("email"),
         password: formData.get("password"),
       });
-
+      if (response?.ok) {
+        router.push("/");
+      }
       if (response?.error) {
         // Mapping the error to a user-friendly message using switch / case
         switch (response.error) {
@@ -62,36 +78,34 @@ export default function LoginForm() {
   return (
     <div>
       {session.status === "loading" ? (
-        <div style={{ color: "white" }}>Loading ...</div>
-      ) : session.status === "authenticated" ? (
-        <>
-          <div style={{ color: "white" }}>
-            Welcome {session.data.user?.name}
-          </div>
-          <button
-            onClick={() => signOut()}
-            style={{ padding: "10px 20px", background: "red", color: "white" }}
-          >
-            Sign Out
-          </button>
-        </>
+        <div style={{ color: "white" }} className={quicksand.className}>
+          Loading ...
+        </div>
       ) : (
-        <>
-          <h2>Login</h2>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            {" "}
+            <h2>Log in</h2>
+          </div>
+
           {error && <h4>{error}</h4>}
-          <form onSubmit={hundleSubmit}>
-            <label>
+          <form onSubmit={hundleSubmit} className={styles.form}>
+            <p className={quicksand.className}>
+              Nice to see you again! Please verify your Space Credentials to
+              continue your Galactic Journey.
+            </p>
+            <label className={styles.spacedLabel}>
               Email
               <input name="email" type="email" />
             </label>
-            <label>
+            <label className={styles.spacedLabel}>
               Password
               <input name="password" type="password" />
             </label>
-            <button>Sign Up</button>
+            <button className={styles.button}>Confirm!</button>
           </form>
           <SignInGoogle />
-        </>
+        </div>
       )}
     </div>
   );
