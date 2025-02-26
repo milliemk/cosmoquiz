@@ -15,7 +15,7 @@ export default function SignIn() {
       }}
     >
       <button className={styles.buttonGoogle} type="submit">
-        <img src="/web_neutral_rd_SI.svg" alt="Login with Google" />
+        <img src="/web_neutral_rd_SU.svg" alt="Login with Google" />
       </button>
     </form>
   );

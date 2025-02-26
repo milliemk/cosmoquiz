@@ -30,8 +30,20 @@ td {
   color: aliceblue;
 }
 
+/* .topContainer {
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+  align-items: flex-start;
+  width: 100%;
+}
+ */
 .homeTitle {
+  justify-self: center;
   margin-top: 2rem;
   font-size: 70px;
   color: aliceblue;
+}
+
+a {
+  text-decoration: none; /* Removes the underline */
 }
