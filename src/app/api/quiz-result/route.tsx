@@ -4,9 +4,14 @@ import { eq, sql } from "drizzle-orm";
 
 export async function POST(req: Request) {
   try {
-    const { userId, score, totalQuestions } = await req.json();
+    const { userId, score, totalQuestions, maxScorePerQuiz } = await req.json();
 
-    if (!userId || score === undefined || totalQuestions === undefined) {
+    if (
+      !userId ||
+      score === undefined ||
+      totalQuestions === undefined ||
+      maxScorePerQuiz === undefined
+    ) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
@@ -26,6 +31,7 @@ export async function POST(req: Request) {
           userId,
           score,
           totalQuestions,
+          maxScorePerQuiz,
         });
       } else {
         await trx
@@ -34,6 +40,7 @@ export async function POST(req: Request) {
           .set({
             score: sql`${quizResults.score} + ${score}`,
             totalQuestions: sql`${quizResults.totalQuestions} + ${totalQuestions}`,
+            maxScorePerQuiz: sql`${quizResults.maxScorePerQuiz} + ${maxScorePerQuiz}`,
           })
           .where(eq(quizResults.userId, userId));
       }

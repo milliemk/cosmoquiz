@@ -6,3 +6,14 @@ export interface Content {
   correctIndex: number
   hint: string
 }
+
+export interface Session {
+  user: User
+}
+
+export interface User {
+email: string
+id: string
+image?: string
+name: string
+}
