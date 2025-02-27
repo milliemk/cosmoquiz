@@ -46,7 +46,7 @@ export default function LoginForm() {
 
       const response = await signIn("credentials", {
         // to avoid page reload
-        redirect: false,
+        redirect: true,
         email: formData.get("email"),
         password: formData.get("password"),
       });

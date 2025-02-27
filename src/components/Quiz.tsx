@@ -33,6 +33,7 @@ export default function Quiz() {
 
   const session = useSession();
   console.log("session from Quiz component:>> ", session);
+  console.log("questions :>> ", questions);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -73,15 +74,21 @@ export default function Quiz() {
   };
 
   async function submitQuizResult(
-    userId: string,
+    userId: string | undefined,
     score: number,
-    totalQuestions: number
+    totalQuestions: number,
+    maxScorePerQuiz: number
   ) {
     try {
       const response = await fetch("/api/quiz-result", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, score, totalQuestions }),
+        body: JSON.stringify({
+          userId,
+          score,
+          totalQuestions,
+          maxScorePerQuiz,
+        }),
       });
 
       if (!response.ok) throw new Error("Failed to submit quiz result");
@@ -103,13 +110,34 @@ export default function Quiz() {
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
-      alert(`Quiz Completed! You scored ${quizResult} points`);
+      // to get maxScorePerQuiz
+      let maxScorePerQuiz;
+      switch (difficulty) {
+        case "easy":
+          maxScorePerQuiz = questions.length;
+          break;
+        case "medium":
+          maxScorePerQuiz = 2 * questions.length;
+          break;
+        case "hard":
+          maxScorePerQuiz = 3 * questions.length;
+          break;
+      }
+      alert(
+        `Quiz Completed! You scored ${quizResult} points from ${maxScorePerQuiz} possible`
+      );
       setQuizResult(0);
       setQuizStarted(false);
       // At this point we send score to the server, if user is logedIn
       if (session.status === "authenticated") {
-        console.log("User is autorised");
-        submitQuizResult(session.data.user.id, quizResult, questions.length);
+        console.log("User is autorised to store quiz resolt");
+
+        submitQuizResult(
+          session.data.user?.id,
+          quizResult,
+          questions.length,
+          maxScorePerQuiz!
+        );
       }
     }
   };

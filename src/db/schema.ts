@@ -107,5 +107,6 @@ export const quizResults = pgTable("quiz_result", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }), 
   score: integer("score").notNull(), 
-  totalQuestions: integer("total_questions").notNull()
+  totalQuestions: integer("total_questions").notNull(),
+  maxScorePerQuiz: integer("max_scores_of_all_quizzes").notNull()
 });

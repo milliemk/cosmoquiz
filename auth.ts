@@ -6,6 +6,7 @@ import Credentials from "@auth/core/providers/credentials";
 import { eq } from "drizzle-orm";
 import { AccessDenied, AccountNotLinked } from "@auth/core/errors";
 import Google from "next-auth/providers/google";
+import { User } from "@/models/customTypes";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -62,15 +63,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id; // Store user ID in JWT token
       }
+
+if (trigger === "update") {
+    // Force session update when needed
+    return { ...token };
+  }
+
       return token;
     },
+
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id; // Add user ID to session
+      const userProfile = session.user as User
+      if (userProfile) {
+        userProfile.id = token.id as string; // Add user ID to session
       }
       return session;
     },
