@@ -1,0 +1,115 @@
+.howtopage {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5rem;
+}
+
+.containerLoggedIn {
+  padding-bottom: 2rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  max-width: 500px;
+  height: fit-content;
+  background-color: rgba(33, 33, 33, 0.7);
+  border-radius: 20px;
+  box-sizing: border-box;
+  margin-bottom: 10rem;
+  color: aliceblue;
+
+  & h2 {
+    font-family: "Righteous";
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  & p {
+    font-family: "Quicksand";
+    margin-bottom: 0;
+    font-size: 15px;
+  }
+  & h4 {
+    font-family: "Righteous";
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  & ul {
+    font-family: "Quicksand";
+    margin-bottom: 0;
+  }
+
+  & li {
+    font-family: "Quicksand";
+    font-size: 15px;
+  }
+}
+
+.container {
+  padding-bottom: 2rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  max-width: 500px;
+  height: fit-content;
+  background-color: rgba(33, 33, 33, 0.7);
+  border-radius: 20px;
+  box-sizing: border-box;
+  margin-bottom: 10rem;
+  color: aliceblue;
+
+  & h2 {
+    font-family: "Righteous";
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  & p {
+    font-family: "Quicksand";
+    margin-bottom: 0;
+    font-size: 15px;
+  }
+  & h4 {
+    font-family: "Righteous";
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  & ul {
+    font-family: "Quicksand";
+    margin-bottom: 0;
+    margin-top: 1rem;
+  }
+
+  & li {
+    font-family: "Quicksand";
+    font-size: 15px;
+    margin-top: 1rem;
+  }
+}
+
+.note {
+  font-family: "Righteous";
+}
+
+@media (max-width: 1080px) {
+  .howtopage {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .container {
+    padding-bottom: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    max-width: 500px;
+    height: fit-content;
+    background-color: rgba(33, 33, 33, 0.7);
+    border-radius: 20px;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    color: aliceblue;
+  }
+}
