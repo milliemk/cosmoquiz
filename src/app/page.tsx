@@ -29,8 +29,9 @@ export default async function Home() {
           <p className={quicksand.className}>
             What’s up, space cadet? Galaxy Gus here to guide you through a
             cosmic quiz. Let’s see if you’ve got what it takes to be a true
-            space explorer. Ready for lift-off?
+            space explorer.
           </p>
+          <p className={quicksand.className}> Ready for lift-off?</p>
           <Link href="/quiz">
             <button className={styles.button}>Launch!</button>
           </Link>
