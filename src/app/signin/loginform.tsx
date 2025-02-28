@@ -46,12 +46,15 @@ export default function LoginForm() {
 
       const response = await signIn("credentials", {
         // to avoid page reload
-        redirect: true,
+        redirect: false,
         email: formData.get("email"),
         password: formData.get("password"),
+        callbackUrl: "/quiz",
       });
-      if (response?.ok) {
+      console.log("response response :>> ", response);
+      if (!response?.error) {
         router.push("/");
+        router.refresh();
       }
       if (response?.error) {
         // Mapping the error to a user-friendly message using switch / case

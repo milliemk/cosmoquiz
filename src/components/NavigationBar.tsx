@@ -15,7 +15,7 @@ const righteous = Righteous({
   subsets: ["latin"],
 });
 
-function NavigationBar() {
+function NavigationBar({ sessionProp }) {
   const { status, data: session } = useSession();
   console.log("session :>> ", session);
   const [scorePercentage, setScorePercentage] = useState(0);
@@ -58,11 +58,11 @@ function NavigationBar() {
 
   useEffect(() => {
     console.log("useEffect from NavigationBar BEFORE");
-    if (status === "authenticated") {
+    if (sessionProp) {
       console.log("useEffect from NavigationBar AFTER");
-      receiveScoresFromServer(session.user?.id!);
+      receiveScoresFromServer(sessionProp.user.id);
     }
-  }, [status, session]);
+  });
 
   return (
     <>
@@ -73,10 +73,10 @@ function NavigationBar() {
         >
           Loading ...
         </div>
-      ) : status === "authenticated" ? (
+      ) : sessionProp !== null ? (
         <div className={styles.container}>
           <div className={styles.userBox}>
-            <p className={righteous.className}>{session.user?.name}</p>
+            <p className={righteous.className}>{sessionProp.user?.name}</p>
             <p className={quicksand.className}>{scorePercentage}%</p>
             <p className={quicksand.className}>{score}p</p>
             <Link href="/rankings">
@@ -94,7 +94,12 @@ function NavigationBar() {
             </Link>
           </div>
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() =>
+              signOut({
+                redirect: true,
+                callbackUrl: "/",
+              })
+            }
             className={styles.button}
           >
             Sign Out
