@@ -15,10 +15,11 @@ const righteous = Righteous({
   subsets: ["latin"],
 });
 
-function NavigationBar() {
+function NavigationBar({ sessionProp }) {
   const { status, data: session } = useSession();
   console.log("session :>> ", session);
   const [scorePercentage, setScorePercentage] = useState(0);
+  const [score, setscore] = useState(0);
 
   console.log("status:", status);
   console.log("session:", session);
@@ -35,6 +36,7 @@ function NavigationBar() {
 
       const result = await response.json();
       const score = result.score;
+      setscore(score);
       const totalQuestions = result.totalQuestions;
       const maxScorePerQuiz = result.maxScorePerQuiz;
       console.log(score, totalQuestions, maxScorePerQuiz);
@@ -56,11 +58,11 @@ function NavigationBar() {
 
   useEffect(() => {
     console.log("useEffect from NavigationBar BEFORE");
-    if (status === "authenticated") {
+    if (sessionProp) {
       console.log("useEffect from NavigationBar AFTER");
-      //receiveScoresFromServer(session.user?.id);
+      receiveScoresFromServer(sessionProp.user.id);
     }
-  }, [status, session]);
+  });
 
   return (
     <>
@@ -71,13 +73,35 @@ function NavigationBar() {
         >
           Loading ...
         </div>
-      ) : status === "authenticated" ? (
+      ) : sessionProp !== null ? (
         <div className={styles.container}>
           <div className={styles.userBox}>
-            <p className={righteous.className}>{session.user?.name}</p>
+            <p className={righteous.className}>{sessionProp.user?.name}</p>
             <p className={quicksand.className}>{scorePercentage}%</p>
+            <p className={quicksand.className}>{score}p</p>
+            <Link href="/rankings">
+              {" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-bar-chart-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
+              </svg>
+            </Link>
           </div>
-          <button onClick={() => signOut()} className={styles.button}>
+          <button
+            onClick={() =>
+              signOut({
+                redirect: true,
+                callbackUrl: "/",
+              })
+            }
+            className={styles.button}
+          >
             Sign Out
           </button>
         </div>
