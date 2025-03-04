@@ -1,6 +1,9 @@
+"use client";
+import { Player, Rankings } from "@/models/customTypes";
 import styles from "@/styles/rankings.module.css";
 import { Righteous, Quicksand } from "next/font/google";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const righteous = Righteous({
   weight: ["400"],
@@ -12,22 +15,25 @@ const quicksand = Quicksand({
   subsets: ["latin"],
 });
 
-interface Player {
-  rank: number;
-  name: string;
-  score: number;
-  time: string;
-}
-
-const leaderboardData: Player[] = [
-  { rank: 1, name: "Astronaut A", score: 10, time: "2m 30s" },
-  { rank: 2, name: "Astronaut B", score: 9, time: "2m 45s" },
-  { rank: 3, name: "Astronaut C", score: 9, time: "3m 10s" },
-  { rank: 4, name: "Astronaut D", score: 8, time: "3m 20s" },
-  { rank: 5, name: "Astronaut E", score: 7, time: "3m 35s" },
-];
-
 function page() {
+  const [rankings, setRankings] = useState<Player[]>([]);
+  const fetchDataFromDB = async () => {
+    try {
+      const response = await fetch("/api/ranking-tracker", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log("result ranking:>> ", data.result);
+        setRankings(data.result);
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchDataFromDB();
+  }, []);
   return (
     <>
       <div className={styles.rankingsContainer}>
@@ -38,43 +44,42 @@ function page() {
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Score</th>
-                <th>Time</th>
               </tr>
             </thead>
             <tbody>
-              {leaderboardData.map((player, index) => (
-                <tr key={index}>
-                  <td>
-                    {player.rank === 1 ? (
-                      <Image
-                        alt="trophy"
-                        src="/first.png"
-                        height={60}
-                        width={60}
-                      />
-                    ) : player.rank === 2 ? (
-                      <Image
-                        alt="silver"
-                        src="/second.png"
-                        height={60}
-                        width={60}
-                      />
-                    ) : player.rank === 3 ? (
-                      <Image
-                        alt="bronze"
-                        src="/third.png"
-                        height={60}
-                        width={60}
-                      />
-                    ) : (
-                      player.rank
-                    )}
-                  </td>
-                  <td>{player.name}</td>
-                  <td>{player.score}</td>
-                  <td>{player.time}</td>
-                </tr>
-              ))}
+              {rankings &&
+                rankings.map((player, index) => (
+                  <tr key={index}>
+                    <td>
+                      {index + 1 === 1 ? (
+                        <Image
+                          alt="trophy"
+                          src="/first.png"
+                          height={60}
+                          width={60}
+                        />
+                      ) : index + 1 === 2 ? (
+                        <Image
+                          alt="silver"
+                          src="/second.png"
+                          height={60}
+                          width={60}
+                        />
+                      ) : index + 1 === 3 ? (
+                        <Image
+                          alt="bronze"
+                          src="/third.png"
+                          height={60}
+                          width={60}
+                        />
+                      ) : (
+                        index + 1
+                      )}
+                    </td>
+                    <td>{player.userName}</td>
+                    <td>{player.totalScore}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

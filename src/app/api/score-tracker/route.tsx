@@ -9,22 +9,6 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
-    //This code is required if each quiz will have a separate record assigned to it in the database.
-    /* const result = await db
-      .select({
-        userId: quizResults.userId,
-        totalScore: sql<number>`SUM(${quizResults.score})`,
-        totalQuestions: sql<number>`SUM(${quizResults.totalQuestions})`,
-        maxScorePerQuiz: sql<number>`SUM(${quizResults.maxScorePerQuiz})`,
-        rating: sql<number>`ROUND(LEAST(
-          (SUM(${quizResults.score})::FLOAT / SUM(${quizResults.totalQuestions})) * 
-      (SUM(${quizResults.totalQuestions})::FLOAT / SUM(${quizResults.maxScorePerQuiz})) * 100, 
-          100
-        )::numeric, 1)`,
-      })
-      .from(quizResults)
-      .where(eq(quizResults.userId, userId))
-      .groupBy(quizResults.userId); */
 
     const [result] = await db
       .select({
