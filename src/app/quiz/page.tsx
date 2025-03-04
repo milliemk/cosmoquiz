@@ -1,4 +1,3 @@
-import QuestionFatching from "@/components/questionFetchComponent";
 import Quiz from "@/components/Quiz";
 import { SessionProvider } from "next-auth/react";
 
@@ -10,8 +9,6 @@ export default function page() {
       <SessionProvider>
         <Quiz />
       </SessionProvider>
-
-      {/* <QuestionFatching /> */}
     </div>
   );
 }

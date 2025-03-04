@@ -12,8 +12,11 @@
 
 .modalContent {
   position: relative;
-  background-color: rgb(83, 83, 83, 0.3);
+  background-color: black;
+  margin-top: 3rem;
   padding: 20px;
+  padding-top: 20px;
+  padding-bottom: 300px;
   border-radius: 10px;
   text-align: center;
   font-family: "Quicksand";
