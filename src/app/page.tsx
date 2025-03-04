@@ -24,7 +24,7 @@ const mainText = text.replace(lastSentence, "").trim(); // Remove the last sente
 export default async function Home() {
   return (
     <div className={styles.page}>
-      <div className={styles.welcome}>
+      <motion.div className={styles.welcome}>
         <div className={styles.animationParent}>
           <div style={{ whiteSpace: "pre-wrap" }} className={styles.animation}>
             {/* Animate the main text */}
@@ -100,7 +100,7 @@ export default async function Home() {
           width={209}
           style={{ paddingRight: 40, paddingTop: 20, paddingBottom: 20 }}
         ></Image>
-      </div>
+      </motion.div>
     </div>
   );
 }

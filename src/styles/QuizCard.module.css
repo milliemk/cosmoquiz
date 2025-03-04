@@ -103,3 +103,8 @@
   text-align: center;
   margin-bottom: 1rem;
 }
+
+.hint {
+  color: aliceblue;
+  font-family: "Quicksand";
+}

@@ -6,6 +6,7 @@ import { Quicksand, Righteous } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import * as motion from "motion/react-client";
 
 const quicksand = Quicksand({
   weight: ["400"],
@@ -30,6 +31,7 @@ export default function Quiz() {
   const [difficulty, setDifficulty] = useState("easy");
   const [hint, setHint] = useState(false);
   const [quizResult, setQuizResult] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const session = useSession();
   console.log("session from Quiz component:>> ", session);
@@ -106,9 +108,16 @@ export default function Quiz() {
     // and show allert Quiz Completed! and close block of the questions setQuizStarted(false)
     // IF the length of questionsarray bigger then currentQuestion, we increment this variable and set to null isCoorect and selectedAnswer variables
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer(null);
-      setIsCorrect(null);
+      // Flip animation trigger
+      setIsFlipped(true);
+
+      // Delay changing question until animation completes (e.g., 500ms)
+      setTimeout(() => {
+        setCurrentQuestion((prev) => prev + 1);
+        setSelectedAnswer(null);
+        setIsCorrect(null);
+        setIsFlipped(false); // Reset flip animation
+      }, 1000);
     } else {
       // to get maxScorePerQuiz
       let maxScorePerQuiz;
@@ -209,9 +218,15 @@ export default function Quiz() {
                   </select>
                 </label>
               </div>
-              <div className={styles.quizFooter}>
+              <div
+                className={styles.quizFooter}
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 {/* This button will trigger function which fetch data from server component*/}
-                <button
+                <motion.button
                   onClick={fetchQuestions}
                   disabled={loading}
                   style={{
@@ -221,11 +236,17 @@ export default function Quiz() {
                     border: "transparent",
                     backgroundColor: "black",
                     fontSize: 17,
+                    cursor: "pointer",
+                  }}
+                  whileHover={{
+                    scale: 1.2,
+
+                    boxShadow: "0px 0px 12px rgba(255, 255, 255, 0.6)",
                   }}
                   className={righteous.className}
                 >
                   {loading ? "Loading..." : "Start"}
-                </button>
+                </motion.button>
               </div>
               {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
             </div>{" "}
@@ -234,9 +255,17 @@ export default function Quiz() {
           // This block shows user cards with questions
           <div>
             {loading ? (
-              <p className={quicksand.className}>Loading questions...</p>
+              <h3 className={quicksand.className}> 🪐 Loading questions...</h3>
             ) : questions.length > 0 ? (
-              <div className={styles.quizContainer}>
+              <motion.div
+                className={styles.quizContainer}
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+                style={{
+                  transformStyle: "preserve-3d",
+                  backfaceVisibility: "hidden",
+                }}
+              >
                 <div className={`${styles.quizHeader} ${righteous.className}`}>
                   <h2>{questions[currentQuestion].question}</h2>
                 </div>
@@ -282,7 +311,10 @@ export default function Quiz() {
                       </label>
                     ))}
                     {/* This area is appeared when user press button hint */}
-                    {hint && questions[currentQuestion].hint}
+                    <p className={styles.hint}>
+                      {hint && questions[currentQuestion].hint}
+                    </p>
+
                     {/* This area is appeared when user chooses an answer, here will be shown the answer correct or not */}
                     {selectedAnswer !== null && (
                       <p>
@@ -298,7 +330,7 @@ export default function Quiz() {
                   </div>
                 </div>
                 <div className={styles.quizFooter}>
-                  <button
+                  <motion.button
                     className={quicksand.className}
                     onClick={() => {
                       /* setHint((prevHint) => !prevHint); */
@@ -311,15 +343,25 @@ export default function Quiz() {
                       backgroundColor: "transparent",
                       fontSize: 17,
                     }}
+                    whileHover={{
+                      scale: 1.2,
+                      rotate: 3,
+                      boxShadow: "0px 0px 12px rgba(255, 255, 255, 0.6)",
+                    }}
                   >
                     Hint
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     className={quicksand.className}
                     /* onClick={handleNextQuestion} */
                     onClick={() => {
                       handleNextQuestion();
                       setHint(false);
+                    }}
+                    whileHover={{
+                      scale: 1.2,
+                      rotate: 3,
+                      boxShadow: "0px 0px 12px rgba(255, 255, 255, 0.6)",
                     }}
                     disabled={selectedAnswer === null}
                     style={{
@@ -334,9 +376,9 @@ export default function Quiz() {
                     {currentQuestion < questions.length - 1
                       ? "Next"
                       : "Finish Quiz"}
-                  </button>
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
             ) : (
               <p>No questions available.</p>
             )}

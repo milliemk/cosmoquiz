@@ -8,7 +8,6 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "../../auth";
 import * as motion from "motion/react-client";
 
-
 const righteous = Righteous({
   weight: ["400"],
   subsets: ["latin"],
