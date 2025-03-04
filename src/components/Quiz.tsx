@@ -215,10 +215,13 @@ export default function Quiz() {
                     onChange={(e) => setTopic(e.target.value)}
                     required
                   >
-                    <option value="space">Space</option>
-                    <option value="exoplanet">Exoplanet</option>
-                    <option value="stars">Stars</option>
-                    <option value="planets">Planets</option>
+                    <option value="solarsystem">Solar System</option>
+                    <option value="exoplanets">Exoplanets</option>
+                    <option value="Astronauts">Astronauts</option>
+                    <option value="spaceInPopCulture">
+                      Space in Pop Culture
+                    </option>
+                    <option value="aliensAndUFOs">Aliens & UFOs</option>
                   </select>
                 </label>
               </div>
