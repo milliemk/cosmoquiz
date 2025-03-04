@@ -1,9 +1,10 @@
 "use client";
+import { useScore } from "@/context/context";
+import { AuthSession } from "@/models/customTypes";
 import styles from "@/styles/navigation.module.css";
 import { signOut, useSession } from "next-auth/react";
 import { Quicksand, Righteous } from "next/font/google";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 const quicksand = Quicksand({
   weight: ["400"],
@@ -15,54 +16,9 @@ const righteous = Righteous({
   subsets: ["latin"],
 });
 
-function NavigationBar({ sessionProp }) {
-  const { status, data: session } = useSession();
-  console.log("session :>> ", session);
-  const [scorePercentage, setScorePercentage] = useState(0);
-  const [score, setscore] = useState(0);
-
-  console.log("status:", status);
-  console.log("session:", session);
-
-  async function receiveScoresFromServer(userId: string) {
-    try {
-      const response = await fetch("/api/score-tracker", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-
-      if (!response.ok) throw new Error("Failed to receive scores");
-
-      const result = await response.json();
-      const score = result.score;
-      setscore(score);
-      const totalQuestions = result.totalQuestions;
-      const maxScorePerQuiz = result.maxScorePerQuiz;
-      console.log(score, totalQuestions, maxScorePerQuiz);
-      const rating = Math.min(
-        (score / totalQuestions) * (totalQuestions / maxScorePerQuiz) * 100,
-        100
-      );
-      const roundedRating = Math.round(rating * 1000) / 1000;
-      console.log("raiting RAITING:>> ", roundedRating);
-      setScorePercentage(roundedRating);
-
-      console.log("response from receiveScoresFromServer :>> ", result);
-
-      console.log("Scores were received successfully!");
-    } catch (error) {
-      console.error("Error receiving scores :", error);
-    }
-  }
-
-  useEffect(() => {
-    console.log("useEffect from NavigationBar BEFORE");
-    if (sessionProp) {
-      console.log("useEffect from NavigationBar AFTER");
-      receiveScoresFromServer(sessionProp.user.id);
-    }
-  });
+function NavigationBar({ sessionProp }: { sessionProp: AuthSession }) {
+  const { status } = useSession();
+  const { score, scorePercentage } = useScore();
 
   return (
     <>

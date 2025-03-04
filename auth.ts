@@ -23,7 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials: any): Promise<any> {
         let user = null;
-        console.log('credentials :>> ', credentials);
+        //console.log('credentials :>> ', credentials);
         const userPass = credentials.password;
         const userEmail = credentials.email;
 

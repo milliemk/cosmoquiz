@@ -1,11 +1,11 @@
 "use client";
 import styles from "@/styles/QuizCard.module.css";
 import { Content } from "@/models/customTypes";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Quicksand, Righteous } from "next/font/google";
-import Head from "next/head";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useScore } from "@/context/context";
 import * as motion from "motion/react-client";
 
 const quicksand = Quicksand({
@@ -31,11 +31,12 @@ export default function Quiz() {
   const [difficulty, setDifficulty] = useState("easy");
   const [hint, setHint] = useState(false);
   const [quizResult, setQuizResult] = useState(0);
+  const { fetchScores } = useScore();
   const [isFlipped, setIsFlipped] = useState(false);
 
   const session = useSession();
   console.log("session from Quiz component:>> ", session);
-  console.log("questions :>> ", questions);
+  //console.log("questions :>> ", questions);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -94,7 +95,10 @@ export default function Quiz() {
       });
 
       if (!response.ok) throw new Error("Failed to submit quiz result");
-
+      // Updating NavigationBar!!!
+      if (userId) {
+        fetchScores(userId);
+      }
       console.log("Quiz result saved successfully!");
     } catch (error) {
       console.error("Error submitting quiz result:", error);
