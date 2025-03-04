@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useScore } from "@/context/context";
 import * as motion from "motion/react-client";
+import Modal from "./Modal";
+
 
 const quicksand = Quicksand({
   weight: ["400"],
@@ -33,6 +35,8 @@ export default function Quiz() {
   const [quizResult, setQuizResult] = useState(0);
   const { fetchScores } = useScore();
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [score, setScore] = useState(0);
 
   const session = useSession();
   console.log("session from Quiz component:>> ", session);
@@ -105,6 +109,26 @@ export default function Quiz() {
     }
   }
 
+  const getQuizResult = () => {
+    if (quizResult === 0) {
+      return {
+        rank: "Starship Rookie",
+        message:
+          "Every great explorer has to start somewhere! Better luck next time!",
+      };
+    } else if (quizResult > 0 && quizResult < 4) {
+      return {
+        rank: "Astral Navigator",
+        message: "You're on your way! Keep reaching for the stars!",
+      };
+    } else {
+      return {
+        rank: "Galactic Commander",
+        message: "Incredible! The universe bows to your knowledge!",
+      };
+    }
+  };
+
   // This function show next question when user press the button next question
   const handleNextQuestion = () => {
     // In block IF we check, that we can't go farther then length array of the questions
@@ -136,11 +160,11 @@ export default function Quiz() {
           maxScorePerQuiz = 3 * questions.length;
           break;
       }
-      alert(
-        `Quiz Completed! You scored ${quizResult} points from ${maxScorePerQuiz} possible`
-      );
+      setIsOpen((prev) => !prev);
+      setScore((prev) => (prev = quizResult));
       setQuizResult(0);
       setQuizStarted(false);
+
       // At this point we send score to the server, if user is logedIn
       if (session.status === "authenticated") {
         console.log("User is autorised to store quiz resolt");
@@ -154,11 +178,19 @@ export default function Quiz() {
       }
     }
   };
+  const { rank, message } = getQuizResult();
 
   return (
     // This Block shows to the user parameter area
     <>
       <div>
+        <Modal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          rank={rank}
+          score={score}
+          message={message}
+        />
         <div className={styles.abort}>
           <Link href="/" className={righteous.className}>
             Cancel

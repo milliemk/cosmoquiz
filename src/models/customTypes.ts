@@ -27,3 +27,12 @@ export interface AuthSession {
   };
   expires: string; 
 }
+
+export interface Rankings {
+  Data: Player[];
+}
+ 
+export interface Player {
+  userName: string;
+  totalScore: number;
+ }

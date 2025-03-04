@@ -1,10 +1,10 @@
 import { SessionProvider } from "next-auth/react";
-import Form from "./form";
+import RegisterForm from "../../components/RegisterForm";
 
 export default async function RegisterComponent() {
   return (
     <SessionProvider>
-      <Form />
+      <RegisterForm />
     </SessionProvider>
   );
 }
