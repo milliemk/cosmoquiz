@@ -9,6 +9,7 @@ import * as motion from "motion/react-client";
 import { ScoreProvider } from "@/context/context";
 import { AuthSession } from "@/models/customTypes";
 
+
 const righteous = Righteous({
   weight: ["400"],
   subsets: ["latin"],

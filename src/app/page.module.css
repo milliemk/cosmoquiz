@@ -156,9 +156,14 @@ a.secondary {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: rgb(83, 83, 83, 0.3);
+  background-color: rgba(
+    56,
+    55,
+    55,
+    0.6
+  ); /* Slightly darker to contrast in dark mode */
   border-radius: 20px;
-  padding: 0.5rem;
+  padding: 1rem; /* Increased padding for a bigger effect */
   gap: 1rem;
   margin-top: 300px;
 
@@ -167,6 +172,8 @@ a.secondary {
     max-width: 400px;
     font-size: 22px;
     text-align: center;
+    color: #fff; /* Ensure the text stands out */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Adding shadow to text for better visibility */
   }
 }
 
