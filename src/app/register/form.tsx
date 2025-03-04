@@ -5,6 +5,7 @@ import { object, string, ZodError } from "zod";
 import styles from "@/styles/loginAndRegister.module.css";
 import { Quicksand, Righteous } from "next/font/google";
 import RegisterGoogle from "@/components/RegisterGoogle";
+import { useRouter } from "next/navigation";
 
 const quicksand = Quicksand({
   weight: ["400"],
@@ -35,6 +36,7 @@ export default function form() {
     null
   );
   const session = useSession();
+  const router = useRouter();
   console.log("session :>> ", session);
 
   const hundleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -68,6 +70,10 @@ export default function form() {
           email: userData.email,
           password: userData.password,
         });
+        if (!response?.error) {
+          router.push("/");
+          router.refresh();
+        }
       }
       console.log("result :>> ", result);
     } catch (error) {

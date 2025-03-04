@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Righteous } from "next/font/google";
 import NavigationBar from "@/components/NavigationBar";
-import { SessionProvider } from "next-auth/react";
+import getServerSession from "next-auth";
 import Link from "next/link";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "../../auth";
 import * as motion from "motion/react-client";
 
 const righteous = Righteous({
@@ -17,11 +19,15 @@ export const metadata: Metadata = {
   icons: "/svg.svg",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  //const session = await getServerSession();
+  const session = await auth();
+  console.log("session from LAYOUT :>> ", session);
+
   console.log("RootLayout :>> ");
   return (
     <html lang="en">
@@ -64,7 +70,7 @@ export default function RootLayout({
                 Cosmoquiz
               </motion.h1>
             </Link>
-            <NavigationBar />
+            <NavigationBar sessionProp={session} />
             {children}
           </div>
         </body>
