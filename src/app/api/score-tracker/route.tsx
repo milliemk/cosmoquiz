@@ -9,22 +9,64 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
+    //This code is required if each quiz will have a separate record assigned to it in the database.
+    /* const result = await db
+      .select({
+        userId: quizResults.userId,
+        totalScore: sql<number>`SUM(${quizResults.score})`,
+        totalQuestions: sql<number>`SUM(${quizResults.totalQuestions})`,
+        maxScorePerQuiz: sql<number>`SUM(${quizResults.maxScorePerQuiz})`,
+        rating: sql<number>`ROUND(LEAST(
+          (SUM(${quizResults.score})::FLOAT / SUM(${quizResults.totalQuestions})) * 
+      (SUM(${quizResults.totalQuestions})::FLOAT / SUM(${quizResults.maxScorePerQuiz})) * 100, 
+          100
+        )::numeric, 1)`,
+      })
+      .from(quizResults)
+      .where(eq(quizResults.userId, userId))
+      .groupBy(quizResults.userId); */
 
     const [result] = await db
-      .select()
+      .select({
+        userId: quizResults.userId,
+        totalScore: quizResults.score,
+        totalQuestions: quizResults.totalQuestions,
+        maxScorePerQuiz: quizResults.maxScorePerQuiz,
+        percentage: sql<number>`ROUND(
+      LEAST(
+        (${quizResults.score}::FLOAT / ${quizResults.totalQuestions}) * 
+        (${quizResults.totalQuestions}::FLOAT / ${quizResults.maxScorePerQuiz}) * 100, 
+        100
+      )::numeric, 1)`,
+      })
       .from(quizResults)
-      .where(eq(quizResults.userId, userId));
+      .where(eq(quizResults.userId, userId))
+      .limit(1);
 
-    console.log("result FROM DB:>> ", result);
+    //console.log("RESULT FROM DB CALCULATION :>> ", result);
 
-    return NextResponse.json(
-      {
-        score: result.score,
-        totalQuestions: result.totalQuestions,
-        maxScorePerQuiz: result.maxScorePerQuiz,
-      },
-      { status: 201 }
-    );
+    if (result) {
+      return NextResponse.json(
+        {
+          score: result.totalScore,
+          totalQuestions: result.totalQuestions,
+          maxScorePerQuiz: result.maxScorePerQuiz,
+          percentage: result.percentage,
+        },
+        { status: 201 }
+      );
+    } else {
+      console.log("THERE IS ANY DATA IN DB ABOUT QUIZ RESULT");
+      return NextResponse.json(
+        {
+          score: 0,
+          totalQuestions: 0,
+          maxScorePerQuiz: 0,
+          percentage: 0,
+        },
+        { status: 201 }
+      );
+    }
   } catch (error) {
     console.error("Error receiving scores from DB:", error);
     return NextResponse.json(
