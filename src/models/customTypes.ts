@@ -17,3 +17,13 @@ id: string
 image?: string
 name: string
 }
+
+export interface AuthSession {
+  user: {
+    name: string;
+    email: string;
+    image: string | null;
+    id: string;
+  };
+  expires: string; 
+}
