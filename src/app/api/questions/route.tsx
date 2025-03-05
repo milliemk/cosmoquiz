@@ -33,6 +33,7 @@ Each question must follow this JSON format:
 
 Return ONLY the JSON array, without any additional text.
 `;
+
     const result = await model.generateContent({
       contents: [
         {
@@ -52,6 +53,7 @@ Return ONLY the JSON array, without any additional text.
     });
 
     const textResponse = result.response.text().trim();
+
     // Extract JSON safely
     const jsonMatch = textResponse.match(/```json\n([\s\S]+)\n```/);
     // console.log("array index 0", jsonMatch[0]);

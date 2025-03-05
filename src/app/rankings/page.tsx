@@ -1,4 +1,5 @@
 "use client";
+import { useScore } from "@/context/context";
 import { Player, Rankings } from "@/models/customTypes";
 import styles from "@/styles/rankings.module.css";
 import { Righteous, Quicksand } from "next/font/google";
@@ -17,6 +18,8 @@ const quicksand = Quicksand({
 
 function page() {
   const [rankings, setRankings] = useState<Player[]>([]);
+  const { session } = useScore();
+
   const fetchDataFromDB = async () => {
     try {
       const response = await fetch("/api/ranking-tracker", {
@@ -43,6 +46,7 @@ function page() {
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Score</th>
+                <th>Percentage of the right answers</th>
               </tr>
             </thead>
             <tbody>
@@ -75,8 +79,17 @@ function page() {
                         index + 1
                       )}
                     </td>
-                    <td>{player.userName}</td>
+                    <td>
+                      {player.userId == session?.user.id ? (
+                        <span style={{ color: "red", fontWeight: "bold" }}>
+                          YOU
+                        </span>
+                      ) : (
+                        player.userName
+                      )}
+                    </td>
                     <td>{player.totalScore}</td>
+                    <td>{player.percentage}%</td>
                   </tr>
                 ))}
             </tbody>

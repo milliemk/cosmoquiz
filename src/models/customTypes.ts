@@ -35,4 +35,6 @@ export interface Rankings {
 export interface Player {
   userName: string;
   totalScore: number;
+  percentage: number;
+  userId: string;
  }

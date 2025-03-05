@@ -1,5 +1,5 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { object, string, ZodError } from "zod";
 import styles from "@/styles/loginAndRegister.module.css";
@@ -93,12 +93,6 @@ export default function RegisterForm() {
           <div style={{ color: "white" }} className={righteous.className}>
             Welcome, {session.data.user?.name}!
           </div>
-          <button
-            onClick={() => signOut()}
-            style={{ padding: "10px 20px", background: "red", color: "white" }}
-          >
-            Sign Out
-          </button>
         </>
       ) : (
         <div className={styles.container}>

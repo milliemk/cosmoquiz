@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { encryptPassword } from "../../../../../utils/passwordServices";
 import { db, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { signIn } from "next-auth/react";
 
 export async function POST(req: Request) {
   try {
@@ -33,7 +32,6 @@ export async function POST(req: Request) {
         password: hashPassword,
       })
       .returning();
-    console.log("newUser :>> ", newUser);
 
     // Successful registratio
     return NextResponse.json(
@@ -47,5 +45,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-  //return NextResponse.json({ message: "success" });
 }

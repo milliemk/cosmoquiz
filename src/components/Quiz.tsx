@@ -35,13 +35,13 @@ export default function Quiz() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [maxScorePerQuiz, setMaxScorePerQuiz] = useState(0);
-
   const session = useSession();
 
   const fetchQuestions = async () => {
     setLoading(true);
     setQuizStarted(true);
     setQuizResult(0);
+
     try {
       const response = await fetch("/api/questions", {
         method: "POST",
@@ -50,6 +50,7 @@ export default function Quiz() {
       });
 
       const data = await response.json();
+
       if (response.ok) {
         setQuestions(data);
         setCurrentQuestion(0);
@@ -152,6 +153,7 @@ export default function Quiz() {
           maxScorePerQuiz = 3 * questions.length;
           break;
       }
+
       setMaxScorePerQuiz(maxScorePerQuiz);
       setIsOpen((prev) => !prev);
       setQuizStarted(false);
