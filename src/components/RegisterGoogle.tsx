@@ -5,10 +5,6 @@ import styles from "@/styles/loginAndRegister.module.css";
 export default function SignIn() {
   return (
     <form
-      /* action={async () => {
-        "use server";
-        await signIn("google");
-      }} */
       onSubmit={async (e) => {
         e.preventDefault();
         await signIn("google");

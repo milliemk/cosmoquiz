@@ -9,7 +9,6 @@ import { useScore } from "@/context/context";
 import * as motion from "motion/react-client";
 import Modal from "./Modal";
 
-
 const quicksand = Quicksand({
   weight: ["400"],
   subsets: ["latin"],
@@ -23,7 +22,6 @@ const righteous = Righteous({
 export default function Quiz() {
   const [questions, setQuestions] = useState<Content[]>([]);
   const [loading, setLoading] = useState(false);
-  //const [error, setError] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -36,16 +34,13 @@ export default function Quiz() {
   const { fetchScores } = useScore();
   const [isFlipped, setIsFlipped] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [score, setScore] = useState(0);
 
   const session = useSession();
-  console.log("session from Quiz component:>> ", session);
-  //console.log("questions :>> ", questions);
 
   const fetchQuestions = async () => {
     setLoading(true);
-    //setError(null);
     setQuizStarted(true);
+    setQuizResult(0);
 
     try {
       const response = await fetch("/api/questions", {
@@ -55,17 +50,15 @@ export default function Quiz() {
       });
 
       const data = await response.json();
-      //console.log("data :>> ", data);
+
       if (response.ok) {
         setQuestions(data);
         setCurrentQuestion(0);
         setSelectedAnswer(null);
         setIsCorrect(null);
-      } else {
-        //setError(data.error || "Failed to load questions");
       }
     } catch (err) {
-      //setError("An error occurred");
+      console.log("error :>> ", err);
     } finally {
       // block finaly performs always, here we hide loader regardless of whether the response is successful or not
       setLoading(false);
@@ -99,7 +92,7 @@ export default function Quiz() {
       });
 
       if (!response.ok) throw new Error("Failed to submit quiz result");
-      // Updating NavigationBar!!!
+
       if (userId) {
         fetchScores(userId);
       }
@@ -160,15 +153,13 @@ export default function Quiz() {
           maxScorePerQuiz = 3 * questions.length;
           break;
       }
+
       setIsOpen((prev) => !prev);
-      setScore((prev) => (prev = quizResult));
-      setQuizResult(0);
       setQuizStarted(false);
 
       // At this point we send score to the server, if user is logedIn
       if (session.status === "authenticated") {
-        console.log("User is autorised to store quiz resolt");
-
+        console.log("User is authorised to store quiz result");
         submitQuizResult(
           session.data.user?.id,
           quizResult,
@@ -188,7 +179,7 @@ export default function Quiz() {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           rank={rank}
-          score={score}
+          score={quizResult}
           message={message}
         />
         <div className={styles.abort}>
@@ -219,9 +210,7 @@ export default function Quiz() {
                         setNumQuestions(1); // You could also default to a specific number if you prefer
                       } else {
                         setNumQuestions(value);
-                        console.log("value", typeof value);
                       }
-                      //setNumQuestions(parseInt(e.target.value))
                     }}
                     min="1"
                     max="10"
@@ -287,7 +276,6 @@ export default function Quiz() {
                   {loading ? "Loading..." : "Start"}
                 </motion.button>
               </div>
-              {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
             </div>{" "}
           </div>
         ) : (
@@ -316,7 +304,6 @@ export default function Quiz() {
                       <label key={index} className={styles.quizAnswers}>
                         <input
                           type="radio"
-                          // name="answer"
                           name={`quiz-${currentQuestion}`}
                           //This prevent default checked from previous question, because the radio button is checked only if selectedAnswer matches index.
                           checked={selectedAnswer === index}
@@ -324,7 +311,7 @@ export default function Quiz() {
                           onChange={() => {
                             handleAnswerSelect(index);
                             setQuizResult((prevResult) => {
-                              // we can not use hier state variable IsCorrect, because of asynchronous behavior
+                              // we can not use here state variable IsCorrect, because of asynchronous behavior
                               if (
                                 index ===
                                 questions[currentQuestion].correctIndex
@@ -372,7 +359,6 @@ export default function Quiz() {
                   <motion.button
                     className={quicksand.className}
                     onClick={() => {
-                      /* setHint((prevHint) => !prevHint); */
                       setHint(true);
                     }}
                     style={{
@@ -392,7 +378,6 @@ export default function Quiz() {
                   </motion.button>
                   <motion.button
                     className={quicksand.className}
-                    /* onClick={handleNextQuestion} */
                     onClick={() => {
                       handleNextQuestion();
                       setHint(false);
@@ -419,7 +404,7 @@ export default function Quiz() {
                 </div>
               </motion.div>
             ) : (
-              <p>No questions available.</p>
+              <h2 className={quicksand.className}>No questions available.</h2>
             )}
           </div>
         )}

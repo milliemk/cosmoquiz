@@ -1,5 +1,5 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { FormEvent, useState } from "react";
 import { object, string, ZodError } from "zod";
 import styles from "@/styles/loginAndRegister.module.css";
@@ -38,7 +38,6 @@ export default function RegisterForm() {
   );
   const session = useSession();
   const router = useRouter();
-  console.log("session :>> ", session);
 
   const hundleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +50,6 @@ export default function RegisterForm() {
     };
     try {
       const validatedData = signUpSchema.parse(userData);
-      //console.log("validatedData :>> ", validatedData);
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -71,7 +69,7 @@ export default function RegisterForm() {
           email: userData.email,
           password: userData.password,
         });
-        if (!response?.error) {
+        if (!signInResponse?.error) {
           router.push("/");
           router.refresh();
         }
@@ -95,12 +93,6 @@ export default function RegisterForm() {
           <div style={{ color: "white" }} className={righteous.className}>
             Welcome, {session.data.user?.name}!
           </div>
-          <button
-            onClick={() => signOut()}
-            style={{ padding: "10px 20px", background: "red", color: "white" }}
-          >
-            Sign Out
-          </button>
         </>
       ) : (
         <div className={styles.container}>

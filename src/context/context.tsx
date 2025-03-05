@@ -6,6 +6,7 @@ type ScoreContextType = {
   score: number;
   scorePercentage: number;
   fetchScores: (userId: string) => Promise<void>;
+  session: AuthSession | null;
 };
 
 const ScoreContext = createContext<ScoreContextType | undefined>(undefined);
@@ -47,7 +48,9 @@ export function ScoreProvider({
   }, [session]);
 
   return (
-    <ScoreContext.Provider value={{ score, scorePercentage, fetchScores }}>
+    <ScoreContext.Provider
+      value={{ score, scorePercentage, fetchScores, session }}
+    >
       {children}
     </ScoreContext.Provider>
   );

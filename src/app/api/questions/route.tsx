@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     });
 
     const prompt = `
-Generate ${numQuestions} multiple-choice questions about ${topic} and make them at the ${difficulty} level. The question title length must be a maximum of 120 characters.
+Generate ${numQuestions} multiple-choice questions about ${topic} and make them at the ${difficulty} level. The question title length must be a maximum of 80 characters.
 
 Each question must follow this JSON format:
 {
@@ -33,8 +33,6 @@ Each question must follow this JSON format:
 
 Return ONLY the JSON array, without any additional text.
 `;
-
-    //const result = await model.generateContent(prompt);
 
     const result = await model.generateContent({
       contents: [
@@ -55,7 +53,6 @@ Return ONLY the JSON array, without any additional text.
     });
 
     const textResponse = result.response.text().trim();
-    // console.log("textResponse", textResponse);
 
     // Extract JSON safely
     const jsonMatch = textResponse.match(/```json\n([\s\S]+)\n```/);
@@ -63,7 +60,6 @@ Return ONLY the JSON array, without any additional text.
     // console.log("array index 1", jsonMatch[1]);
     const jsonString = jsonMatch ? jsonMatch[1] : textResponse;
     const questions = JSON.parse(jsonString);
-    // console.log("questions", questions);
     // NextResponse - Produce a response with the given JSON body
     // https://nextjs.org/docs/app/api-reference/functions/next-response
     return NextResponse.json(questions);

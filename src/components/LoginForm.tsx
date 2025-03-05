@@ -1,6 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { object, string, ZodError } from "zod";
 import SignInGoogle from "@/components/SignInGoogle";
 import styles from "@/styles/loginAndRegister.module.css";
@@ -42,7 +42,6 @@ export default function LoginForm() {
     };
     try {
       const validatedData = signInSchema.parse(userData);
-      console.log("validatedData :>> ", validatedData);
 
       const response = await signIn("credentials", {
         // to avoid page reload
@@ -84,6 +83,12 @@ export default function LoginForm() {
         <div style={{ color: "white" }} className={quicksand.className}>
           Loading ...
         </div>
+      ) : session.status === "authenticated" ? (
+        <>
+          <div style={{ color: "white" }} className={righteous.className}>
+            Welcome, {session.data.user?.name}!
+          </div>
+        </>
       ) : (
         <div className={styles.container}>
           <div className={styles.header}>
