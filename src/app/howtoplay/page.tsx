@@ -43,7 +43,7 @@ function page() {
               </ul>
             </li>
             <li>
-              Category::
+              Category:
               <ul>
                 <li>Solar System</li>
                 <li>Exoplanets</li>

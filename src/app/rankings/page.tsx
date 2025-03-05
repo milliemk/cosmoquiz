@@ -2,6 +2,7 @@
 import { useScore } from "@/context/context";
 import { Player, Rankings } from "@/models/customTypes";
 import styles from "@/styles/rankings.module.css";
+import { p } from "motion/react-client";
 import { Righteous, Quicksand } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -46,7 +47,7 @@ function page() {
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Score</th>
-                <th>Percentage of the right answers</th>
+                <th>Accuracy Rate</th>
               </tr>
             </thead>
             <tbody>
@@ -81,15 +82,42 @@ function page() {
                     </td>
                     <td>
                       {player.userId == session?.user.id ? (
-                        <span style={{ color: "red", fontWeight: "bold" }}>
+                        <p
+                          className={righteous.className}
+                          style={{ color: "red" }}
+                        >
                           YOU
-                        </span>
+                        </p>
                       ) : (
                         player.userName
                       )}
                     </td>
-                    <td>{player.totalScore}</td>
-                    <td>{player.percentage}%</td>
+                    <td>
+                      {" "}
+                      {player.userId == session?.user.id ? (
+                        <p
+                          className={righteous.className}
+                          style={{ color: "red" }}
+                        >
+                          {player.totalScore}p
+                        </p>
+                      ) : (
+                        <p>{player.totalScore}p</p>
+                      )}
+                    </td>
+                    <td>
+                      {" "}
+                      {player.userId == session?.user.id ? (
+                        <p
+                          className={righteous.className}
+                          style={{ color: "red" }}
+                        >
+                          {player.percentage}%
+                        </p>
+                      ) : (
+                        <p>{player.percentage}%</p>
+                      )}
+                    </td>
                   </tr>
                 ))}
             </tbody>
