@@ -45,15 +45,11 @@ function page() {
             <li>
               Category::
               <ul>
-                <li>Space: Everything about the vast cosmos.</li>
-                <li>
-                  Exoplanets: Test your knowledge about planets outside our
-                  solar system.
-                </li>
-                <li>
-                  Stars: Dive deep into the lives of the stars in the sky.
-                </li>
-                <li>Planets: Focus on the planets in our solar system.</li>
+                <li>Solar System</li>
+                <li>Exoplanets</li>
+                <li>Astronauts</li>
+                <li>Space in Pop Culture</li>
+                <li>Aliens and UFOs</li>
               </ul>
             </li>
             <li>

@@ -34,7 +34,7 @@ export default function Quiz() {
   const { fetchScores } = useScore();
   const [isFlipped, setIsFlipped] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [maxScorePerQuiz, setMaxScorePerQuiz] = useState(0);
   const session = useSession();
 
   const fetchQuestions = async () => {
@@ -92,7 +92,6 @@ export default function Quiz() {
       });
 
       if (!response.ok) throw new Error("Failed to submit quiz result");
-
       if (userId) {
         fetchScores(userId);
       }
@@ -103,13 +102,14 @@ export default function Quiz() {
   }
 
   const getQuizResult = () => {
-    if (quizResult === 0) {
+    const percentage = quizResult / maxScorePerQuiz;
+    if (percentage < 0.3) {
       return {
         rank: "Starship Rookie",
         message:
           "Every great explorer has to start somewhere! Better luck next time!",
       };
-    } else if (quizResult > 0 && quizResult < 4) {
+    } else if (percentage > 0.3 && percentage < 0.6) {
       return {
         rank: "Astral Navigator",
         message: "You're on your way! Keep reaching for the stars!",
@@ -141,7 +141,7 @@ export default function Quiz() {
       }, 1000);
     } else {
       // to get maxScorePerQuiz
-      let maxScorePerQuiz;
+      let maxScorePerQuiz = 0;
       switch (difficulty) {
         case "easy":
           maxScorePerQuiz = questions.length;
@@ -154,6 +154,7 @@ export default function Quiz() {
           break;
       }
 
+      setMaxScorePerQuiz(maxScorePerQuiz);
       setIsOpen((prev) => !prev);
       setQuizStarted(false);
 

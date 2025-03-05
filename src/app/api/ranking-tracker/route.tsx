@@ -25,6 +25,7 @@ export async function POST() {
       { result: topUsersWithPercentage },
       { status: 201 }
     );
+
   } catch (error) {
     console.error("Error receiving scores from DB:", error);
   }
