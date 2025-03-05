@@ -12,6 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
+  trustHost: true,
   providers: [
     Google,
     Credentials({
@@ -64,21 +65,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, trigger }) {
+      console.log("token :>> ", token);
       if (user) {
         token.id = user.id; // Store user ID in JWT token
       }
 
-if (trigger === "update") {
-    // Force session update when needed
-    return { ...token };
-  }
+      if (trigger === "update") {
+        // Force session update when needed
+        return { ...token };
+      }
 
       return token;
     },
 
     async session({ session, token }) {
-      const userProfile = session.user as User
+      const userProfile = session.user as User;
       if (userProfile) {
+        console.log("token :>> ", token);
+        console.log("userProfile :>> ", userProfile);
         userProfile.id = token.id as string; // Add user ID to session
       }
       return session;

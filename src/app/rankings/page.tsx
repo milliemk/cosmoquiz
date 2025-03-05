@@ -1,9 +1,8 @@
 "use client";
 import { useScore } from "@/context/context";
-import { Player, Rankings } from "@/models/customTypes";
+import { Player } from "@/models/customTypes";
 import styles from "@/styles/rankings.module.css";
-import { p } from "motion/react-client";
-import { Righteous, Quicksand } from "next/font/google";
+import { Righteous } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -12,12 +11,7 @@ const righteous = Righteous({
   subsets: ["latin"],
 });
 
-const quicksand = Quicksand({
-  weight: ["400", "600"],
-  subsets: ["latin"],
-});
-
-function page() {
+function Page() {
   const [rankings, setRankings] = useState<Player[]>([]);
   const { session } = useScore();
 
@@ -32,7 +26,9 @@ function page() {
         const data = await response.json();
         setRankings(data.result);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("error :>> ", error);
+    }
   };
   useEffect(() => {
     fetchDataFromDB();
@@ -128,4 +124,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

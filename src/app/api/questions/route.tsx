@@ -64,6 +64,7 @@ Return ONLY the JSON array, without any additional text.
     // https://nextjs.org/docs/app/api-reference/functions/next-response
     return NextResponse.json(questions);
   } catch (error) {
+    console.log("error  :>> ", error);
     return NextResponse.json({ error: "Error has occured" }, { status: 500 });
   }
 }

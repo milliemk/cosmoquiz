@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     const hashPassword = await encryptPassword(password);
 
-    const [newUser] = await db
+    await db
       .insert(users)
       .values({
         name: name,

@@ -41,7 +41,7 @@ export default function LoginForm() {
       password: formData.get("password") as string,
     };
     try {
-      const validatedData = signInSchema.parse(userData);
+      signInSchema.parse(userData);
 
       const response = await signIn("credentials", {
         // to avoid page reload
@@ -115,7 +115,7 @@ export default function LoginForm() {
           <SignInGoogle />
           <Link href="/register">
             <p className={quicksand.className} style={{ color: "white" }}>
-              Don't have an account yet? Register!
+              Do not have an account yet? Register!
             </p>
           </Link>
         </div>

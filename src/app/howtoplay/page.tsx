@@ -24,8 +24,7 @@ function page() {
         <div className={styles.container}>
           <h2>How to Play?</h2>
           <p>
-            Ready to test your knowledge of the universe? Here's how to get
-            started:
+            Ready to test your knowledge of the universe? How to get started:
           </p>
           <h4>Choose Your Settings:</h4>
           <ul>
@@ -60,7 +59,7 @@ function page() {
 
           <h4>Answer the Questions:</h4>
           <p>
-            Once your settings are selected, the quiz begins! You'll face a
+            Once your settings are selected, the quiz begins! You will face a
             series of multiple-choice questions based on the category and
             difficulty level you chose.
           </p>

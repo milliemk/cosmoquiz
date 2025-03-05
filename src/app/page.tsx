@@ -1,18 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Righteous, Quicksand } from "next/font/google";
 import Link from "next/link";
 import * as motion from "motion/react-client";
-
-const righteous = Righteous({
-  weight: ["400"],
-  subsets: ["latin"],
-});
-
-const quicksand = Quicksand({
-  weight: ["400", "300"],
-  subsets: ["latin"],
-});
 
 // Text variables
 const text =

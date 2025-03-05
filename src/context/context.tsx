@@ -22,6 +22,7 @@ export function ScoreProvider({
   const [scorePercentage, setScorePercentage] = useState(0);
 
   async function fetchScores(userId: string) {
+    console.log("userId :>> ", userId);
     try {
       const response = await fetch("/api/score-tracker", {
         method: "POST",

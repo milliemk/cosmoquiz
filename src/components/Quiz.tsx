@@ -160,6 +160,7 @@ export default function Quiz() {
 
       // At this point we send score to the server, if user is logedIn
       if (session.status === "authenticated") {
+        console.log("session.status :>> ", session.status);
         console.log("User is authorised to store quiz result");
         submitQuizResult(
           session.data.user?.id,
