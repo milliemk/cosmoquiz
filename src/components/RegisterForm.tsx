@@ -38,7 +38,6 @@ export default function RegisterForm() {
   );
   const session = useSession();
   const router = useRouter();
-  console.log("session :>> ", session);
 
   const hundleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +50,6 @@ export default function RegisterForm() {
     };
     try {
       const validatedData = signUpSchema.parse(userData);
-      //console.log("validatedData :>> ", validatedData);
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -71,7 +69,7 @@ export default function RegisterForm() {
           email: userData.email,
           password: userData.password,
         });
-        if (!response?.error) {
+        if (!signInResponse?.error) {
           router.push("/");
           router.refresh();
         }

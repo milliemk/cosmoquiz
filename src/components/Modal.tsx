@@ -1,9 +1,6 @@
 "use client";
 import styles from "@/styles/modals.module.css";
-import Head from "next/head";
 import Link from "next/link";
-
-// e.stopPropagation = Prevents the modal from closing when clicking inside it.
 
 interface ModalProps {
   isOpen: boolean;

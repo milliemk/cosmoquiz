@@ -7,8 +7,6 @@ import { signIn } from "next-auth/react";
 export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
-    // i have to implement validation for user input
-
     // Check, does the user exist in db?
     const existingUser = await db
       .select()
