@@ -16,7 +16,6 @@ export async function POST() {
       .orderBy(sql`SUM(${quizResults.score}) DESC`)
       .limit(5);
 
-    //console.log("Top 5 Users:", topUsers);
     return NextResponse.json({ result: topUsers }, { status: 201 });
   } catch (error) {
     console.error("Error receiving scores from DB:", error);

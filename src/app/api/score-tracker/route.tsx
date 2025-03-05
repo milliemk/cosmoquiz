@@ -27,8 +27,6 @@ export async function POST(req: Request) {
       .where(eq(quizResults.userId, userId))
       .limit(1);
 
-    //console.log("RESULT FROM DB CALCULATION :>> ", result);
-
     if (result) {
       return NextResponse.json(
         {

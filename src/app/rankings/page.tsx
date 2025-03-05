@@ -26,7 +26,6 @@ function page() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log("result ranking:>> ", data.result);
         setRankings(data.result);
       }
     } catch (error) {}
