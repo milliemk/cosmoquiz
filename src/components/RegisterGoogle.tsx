@@ -8,7 +8,10 @@ export default function SignIn() {
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        await signIn("google");
+        await signIn("google", {
+          redirect: false,
+          callbackUrl: "/",
+        });
       }}
     >
       <button className={styles.buttonGoogle} type="submit">
